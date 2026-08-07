@@ -9,43 +9,40 @@
 html, body {
     height: 100%;
     height: 100dvh;
-    background: linear-gradient(45deg, #1A2980, #26D0CE);
-    color: #FFFFFF;
+    background: #0f172a; /* Ekdam Solid Dark Theme */
+    color: #F8FAFC;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
 header {
-    padding: 15px 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 16px 20px;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
 }
-.logo-text { font-size: 20px; font-weight: 800; letter-spacing: 1px; }
+.logo-text { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: #38bdf8; }
 
 .dashboard-stats {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     padding: 15px;
     flex-shrink: 0;
 }
 .stat-card {
     flex: 1;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 14px;
     border-radius: 12px;
     text-align: center;
 }
-.stat-card span { font-size: 11px; opacity: 0.8; }
-.stat-card h3 { font-size: 18px; margin-top: 4px; }
+.stat-card span { font-size: 12px; color: #94a3b8; }
+.stat-card h3 { font-size: 20px; margin-top: 4px; color: #f1f5f9; }
 
 #product-container {
     flex: 1;
@@ -56,47 +53,47 @@ header {
     gap: 12px;
 }
 .product-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 14px 16px;
-    border-radius: 16px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 16px;
+    border-radius: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
 }
-.prod-details h4 { font-size: 16px; font-weight: 700; }
-.prod-tags { display: flex; gap: 6px; margin-top: 5px; }
+.prod-details h4 { font-size: 17px; font-weight: 700; color: #f8fafc; }
+.prod-tags { display: flex; gap: 6px; margin-top: 6px; }
 .tag {
-    font-size: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 2px 8px;
+    font-size: 11px;
+    background: #334155;
+    color: #cbd5e1;
+    padding: 3px 9px;
     border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
 }
 .prod-right { text-align: right; }
-.prod-price { font-size: 16px; font-weight: bold; color: #26D0CE; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.prod-price { font-size: 17px; font-weight: bold; color: #38bdf8; }
 .stock-control {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-    background: rgba(0,0,0,0.15);
-    padding: 3px 8px;
+    gap: 10px;
+    margin-top: 8px;
+    background: #0f172a;
+    padding: 4px 10px;
     border-radius: 20px;
+    border: 1px solid #334155;
 }
 .stock-control button {
     background: none;
     border: none;
-    color: white;
-    font-size: 16px;
+    color: #38bdf8;
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
 }
-.stock-count { font-size: 13px; font-weight: bold; }
+.stock-count { font-size: 14px; font-weight: bold; color: #ffffff; }
 
 .fab {
     position: fixed;
@@ -104,17 +101,17 @@ header {
     right: 25px;
     width: 60px;
     height: 60px;
-    background: linear-gradient(45deg, #26D0CE, #1A2980);
-    border: 2px solid rgba(255, 255, 255, 0.4);
+    background: #38bdf8;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
-    color: white;
+    font-size: 32px;
+    color: #0f172a;
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
     z-index: 50;
+    font-weight: bold;
 }
 .fab:active { transform: scale(0.92); }
 
@@ -128,20 +125,19 @@ header {
     flex: 1;
     padding: 10px;
     border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.15);
-    color: white;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #f1f5f9;
     font-weight: bold;
     font-size: 13px;
     cursor: pointer;
-    backdrop-filter: blur(5px);
 }
 
+/* Modal Popup Fixes (Dark & High Contrast) */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.8);
     display: none;
     justify-content: center;
     align-items: flex-end;
@@ -149,8 +145,8 @@ header {
 }
 .modal.open { display: flex; }
 .modal-content {
-    background: #1A2980;
-    border-top: 1px solid rgba(255,255,255,0.3);
+    background: #1e293b;
+    border: 1px solid #334155;
     width: 100%;
     max-width: 500px;
     padding: 24px;
@@ -158,39 +154,40 @@ header {
     border-top-right-radius: 24px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.4);
+    gap: 14px;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
     max-height: 85vh;
     overflow-y: auto;
 }
-.modal-content h3 { font-size: 18px; margin-bottom: 4px; }
+.modal-content h3 { font-size: 19px; color: #f8fafc; margin-bottom: 2px; }
+
 .modal-content input, .modal-content select {
     width: 100%;
-    padding: 12px 14px;
+    padding: 14px;
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    font-size: 15px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 16px;
     outline: none;
 }
-.modal-content input::placeholder { color: rgba(255,255,255,0.6); }
-.modal-content select option { background: #1A2980; color: white; }
+.modal-content input::placeholder { color: #94a3b8; }
+.modal-content select option { background: #0f172a; color: white; }
 
 .modal-btns { display: flex; gap: 10px; margin-top: 10px; }
 .modal-btns button {
     flex: 1;
-    padding: 12px;
+    padding: 14px;
     border-radius: 12px;
     border: none;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
 }
-.btn-save { background: #26D0CE; color: #111; }
-.btn-close { background: rgba(255,255,255,0.2); color: white; }
+.btn-save { background: #38bdf8; color: #0f172a; }
+.btn-close { background: #334155; color: #f1f5f9; }
 
-.empty-msg { text-align: center; opacity: 0.7; margin-top: 50px; font-size: 14px; }
+.empty-msg { text-align: center; color: #94a3b8; margin-top: 50px; font-size: 15px; }
 
 @media print {
     body { background: white !important; color: black !important; overflow: auto !important; }
