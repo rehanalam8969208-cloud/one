@@ -3,38 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>one - Clothing & E-Commerce Manager</title>
+    <title>one - Cloud Clothing Manager</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo-text">one - Clothing</div>
-        <div style="font-size: 12px; color: #94a3b8;">E-Commerce Stock</div>
-    </header>
-
-    <div class="dashboard-stats">
-        <div class="stat-card">
-            <span>Total Items</span>
-            <h3 id="total-items">0</h3>
-        </div>
-        <div class="stat-card">
-            <span>Total Stock</span>
-            <h3 id="total-stock">0</h3>
+    <!-- AUTHENTICATION CONTAINER (Login / Signup) -->
+    <div id="auth-screen" class="auth-container">
+        <div class="auth-box">
+            <h2 id="auth-title">Welcome to One</h2>
+            <p id="auth-subtitle" style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;">Apna account banayein ya login karein</p>
+            
+            <input type="email" id="auth-email" placeholder="Email Address">
+            <input type="password" id="auth-password" placeholder="Password (min 6 chars)">
+            
+            <button class="btn-main-auth" id="auth-submit-btn" onclick="handleAuth()">Login</button>
+            <p class="auth-toggle-text" onclick="toggleAuthMode()"><span id="toggle-text-info">Account nahi hai?</span> <b id="toggle-action-btn">Sign Up karein</b></p>
         </div>
     </div>
 
-    <div class="top-action-bar">
-        <button class="btn-action" onclick="window.print()">🖨️ Print / PDF Bill</button>
-        <button class="btn-action" onclick="clearAllData()" style="color: #f87171;">🗑️ Clear Data</button>
+    <!-- MAIN APP CONTAINER (Hidden until logged in) -->
+    <div id="app-screen" style="display: none; height: 100%; display: flex; flex-direction: column;">
+        <header>
+            <div class="logo-text">one - Clothing</div>
+            <button onclick="logoutUser()" style="background:#334155; border:none; color:#f87171; padding:6px 12px; border-radius:8px; font-weight:bold; cursor:pointer;">Logout</button>
+        </header>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <span>Total Items</span>
+                <h3 id="total-items">0</h3>
+            </div>
+            <div class="stat-card">
+                <span>Total Stock</span>
+                <h3 id="total-stock">0</h3>
+            </div>
+        </div>
+
+        <div class="top-action-bar">
+            <button class="btn-action" onclick="window.print()">🖨️ Print / PDF Bill</button>
+        </div>
+
+        <div id="product-container">
+            <!-- Products load here from Cloud -->
+        </div>
+
+        <div class="fab" onclick="openModal()">+</div>
     </div>
 
-    <div id="product-container">
-        <!-- Products load here -->
-    </div>
-
-    <div class="fab" onclick="openModal()">+</div>
-
+    <!-- Add Product Modal -->
     <div class="modal" id="product-modal">
         <div class="modal-content">
             <h3>Naya Kapda / Item Jodein</h3>
@@ -64,6 +81,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Firebase & Main App Script -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
