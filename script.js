@@ -1,6 +1,74 @@
-let products = JSON.parse(localStorage.getItem('one_clothing_stock')) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateid, deleteDoc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-function openModal() {
+const firebaseConfig = {
+  apiKey: "AIzaSyB82Pj-Qcv05Wvdr941nnfAOwj1TU6FkUU",
+  authDomain: "one-14aef.firebaseapp.com",
+  projectId: "one-14aef",
+  storageBucket: "one-14aef.firebasestorage.app",
+  messagingSenderId: "570713727151",
+  appId: "1:570713727151:web:0dae8e88a6ecdda3b3b45a",
+  measurementId: "G-FBDVL0H7PJ"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let isSignUp = false;
+let currentUser = null;
+let products = [];
+
+// Auth State Monitor
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        currentUser = user;
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'flex';
+        loadProductsFromCloud();
+    } else {
+        currentUser = null;
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('app-screen').style.display = 'none';
+    }
+});
+
+window.toggleAuthMode = function() {
+    isSignUp = !isSignUp;
+    document.getElementById('auth-title').innerText = isSignUp ? "Naya Account Banayein" : "Welcome to One";
+    document.getElementById('auth-submit-btn').innerText = isSignUp ? "Sign Up" : "Login";
+    document.getElementById('toggle-text-info').innerText = isSignUp ? "Pehle se account hai?" : "Account nahi hai?";
+    document.getElementById('toggle-action-btn').innerText = isSignUp ? "Login karein" : "Sign Up karein";
+}
+
+window.handleAuth = async function() {
+    const email = document.getElementById('auth-email').value.trim();
+    const password = document.getElementById('auth-password').value.trim();
+
+    if(!email || password.length < 6) {
+        alert("Kripya valid email aur kam se kam 6 akshar ka password daalein!");
+        return;
+    }
+
+    try {
+        if (isSignUp) {
+            await createUserWithEmailAndPassword(auth, email, password);
+            alert("Account ban gaya!");
+        } else {
+            await signInWithEmailAndPassword(auth, email, password);
+        }
+    } catch (error) {
+        alert("Error: " + error.message);
+    }
+}
+
+window.logoutUser = function() {
+    signOut(auth);
+}
+
+// Modal Controls
+window.openModal = function() {
     document.getElementById('prod-name').value = '';
     document.getElementById('prod-color').value = '';
     document.getElementById('prod-price').value = '';
@@ -8,11 +76,13 @@ function openModal() {
     document.getElementById('product-modal').classList.add('open');
 }
 
-function closeModal() {
+window.closeModal = function() {
     document.getElementById('product-modal').classList.remove('open');
 }
 
-function saveProduct() {
+// Cloud Database Functions
+window.saveProduct = async function() {
+    if(!currentUser) return;
     let name = document.getElementById('prod-name').value.trim();
     let size = document.getElementById('prod-size').value;
     let color = document.getElementById('prod-color').value.trim() || 'Standard';
@@ -24,39 +94,42 @@ function saveProduct() {
         return;
     }
 
-    let newProduct = {
-        id: Date.now(),
-        name: name,
-        size: size,
-        color: color,
-        price: price,
-        stock: stock
-    };
-
-    products.push(newProduct);
-    saveAndRender();
-    closeModal();
-}
-
-function updateStock(id, change) {
-    let prod = products.find(p => p.id === id);
-    if(prod) {
-        prod.stock += change;
-        if(prod.stock < 0) prod.stock = 0;
-        saveAndRender();
+    try {
+        await addDoc(collection(db, "products"), {
+            userId: currentUser.uid,
+            name: name,
+            size: size,
+            color: color,
+            price: price,
+            stock: stock,
+            createdAt: Date.now()
+        });
+        closeModal();
+    } catch (error) {
+        alert("Save karne me error aayi: " + error.message);
     }
 }
 
-function saveAndRender() {
-    localStorage.setItem('one_clothing_stock', JSON.stringify(products));
-    renderApp();
+window.updateStock = async function(docId, currentStock, change) {
+    let newStock = currentStock + change;
+    if(newStock < 0) newStock = 0;
+    try {
+        const prodRef = doc(db, "products", docId);
+        await updateDoc(prodRef, { stock: newStock });
+    } catch (error) {
+        alert("Stock update error: " + error.message);
+    }
 }
 
-function clearAllData() {
-    if(confirm("Kya aap saara data delete karna chahte hain?")) {
+function loadProductsFromCloud() {
+    const q = query(collection(db, "products"), where("userId", "==", currentUser.uid));
+    onSnapshot(q, (snapshot) => {
         products = [];
-        saveAndRender();
-    }
+        snapshot.forEach((docSnap) => {
+            products.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        renderApp();
+    });
 }
 
 function renderApp() {
@@ -70,7 +143,7 @@ function renderApp() {
     document.getElementById('total-stock').innerText = totalStockQty;
 
     if(products.length === 0) {
-        container.innerHTML = `<div class="empty-msg">Abhi koi clothing item nahi hai.<br>Neeche diye gaye (+) button se naya product add karein.</div>`;
+        container.innerHTML = `<div class="empty-msg">Abhi cloud par koi item nahi hai.<br>Neeche diye gaye (+) button se naya product add karein.</div>`;
         return;
     }
 
@@ -88,14 +161,12 @@ function renderApp() {
             <div class="prod-right">
                 <div class="prod-price">₹${p.price}</div>
                 <div class="stock-control">
-                    <button onclick="updateStock(${p.id}, -1)">-</button>
+                    <button onclick="updateStock('${p.id}', ${p.stock}, -1)">-</button>
                     <span class="stock-count">${p.stock} pcs</span>
-                    <button onclick="updateStock(${p.id}, 1)">+</button>
+                    <button onclick="updateStock('${p.id}', ${p.stock}, 1)">+</button>
                 </div>
             </div>
         `;
         container.appendChild(card);
     });
 }
-
-renderApp();
