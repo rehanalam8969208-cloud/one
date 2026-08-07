@@ -9,13 +9,69 @@
 html, body {
     height: 100%;
     height: 100dvh;
-    background: #0f172a; /* Ekdam Solid Dark Theme */
+    background: #0f172a;
     color: #F8FAFC;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
+/* Auth Screen Styles */
+.auth-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+.auth-box {
+    background: #1e293b;
+    border: 1px solid #334155;
+    width: 100%;
+    max-width: 400px;
+    padding: 28px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.auth-box h2 { color: #f8fafc; font-size: 22px; }
+.auth-box input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #475569;
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 15px;
+    outline: none;
+}
+.auth-box input::placeholder { color: #94a3b8; }
+.btn-main-auth {
+    background: #38bdf8;
+    color: #0f172a;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+.auth-toggle-text {
+    text-align: center;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    margin-top: 5px;
+}
+.auth-toggle-text b { color: #38bdf8; }
+
+/* Main App Layout */
 header {
     padding: 16px 20px;
     background: #1e293b;
@@ -133,7 +189,7 @@ header {
     cursor: pointer;
 }
 
-/* Modal Popup Fixes (Dark & High Contrast) */
+/* Modal Popup */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -159,8 +215,7 @@ header {
     max-height: 85vh;
     overflow-y: auto;
 }
-.modal-content h3 { font-size: 19px; color: #f8fafc; margin-bottom: 2px; }
-
+.modal-content h3 { font-size: 19px; color: #f8fafc; }
 .modal-content input, .modal-content select {
     width: 100%;
     padding: 14px;
@@ -185,13 +240,13 @@ header {
     cursor: pointer;
 }
 .btn-save { background: #38bdf8; color: #0f172a; }
-.btn-close { background: #334155; color: #f1f5f9; }
+.btn-close { background: #334155; color: #f8fafc; }
 
 .empty-msg { text-align: center; color: #94a3b8; margin-top: 50px; font-size: 15px; }
 
 @media print {
     body { background: white !important; color: black !important; overflow: auto !important; }
-    header, .fab, .top-action-bar, .stock-control, .modal { display: none !important; }
+    header, .fab, .top-action-bar, .stock-control, .modal, .auth-container { display: none !important; }
     .product-card { background: #fff !important; color: black !important; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 10px; }
     .prod-price { color: black !important; }
     .tag { background: #eee !important; color: black !important; border: 1px solid #999 !important; }
