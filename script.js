@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateid, deleteDoc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB82Pj-Qcv05Wvdr941nnfAOwj1TU6FkUU",
@@ -20,23 +20,37 @@ let isSignUp = false;
 let currentUser = null;
 let products = [];
 
-// Auth State Monitor
+// Auth State Check
 onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUser = user;
-        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('lock-screen').style.display = 'none';
         document.getElementById('app-screen').style.display = 'flex';
+        document.getElementById('profile-icon-btn').style.display = 'none';
+        document.getElementById('logout-icon-btn').style.display = 'block';
+        closeAuthModal();
         loadProductsFromCloud();
     } else {
         currentUser = null;
-        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('lock-screen').style.display = 'flex';
         document.getElementById('app-screen').style.display = 'none';
+        document.getElementById('profile-icon-btn').style.display = 'block';
+        document.getElementById('logout-icon-btn').style.display = 'none';
     }
 });
 
+// Modal Open/Close Controls
+window.openAuthModal = function() {
+    document.getElementById('auth-modal').classList.add('open');
+}
+
+window.closeAuthModal = function() {
+    document.getElementById('auth-modal').classList.remove('open');
+}
+
 window.toggleAuthMode = function() {
     isSignUp = !isSignUp;
-    document.getElementById('auth-title').innerText = isSignUp ? "Naya Account Banayein" : "Welcome to One";
+    document.getElementById('auth-title').innerText = isSignUp ? "Naya Account Banayein" : "Account Login";
     document.getElementById('auth-submit-btn').innerText = isSignUp ? "Sign Up" : "Login";
     document.getElementById('toggle-text-info').innerText = isSignUp ? "Pehle se account hai?" : "Account nahi hai?";
     document.getElementById('toggle-action-btn').innerText = isSignUp ? "Login karein" : "Sign Up karein";
@@ -54,7 +68,7 @@ window.handleAuth = async function() {
     try {
         if (isSignUp) {
             await createUserWithEmailAndPassword(auth, email, password);
-            alert("Account ban gaya!");
+            alert("Account safalpurvak ban gaya!");
         } else {
             await signInWithEmailAndPassword(auth, email, password);
         }
@@ -67,8 +81,8 @@ window.logoutUser = function() {
     signOut(auth);
 }
 
-// Modal Controls
-window.openModal = function() {
+// Product Modal
+window.openProductModal = function() {
     document.getElementById('prod-name').value = '';
     document.getElementById('prod-color').value = '';
     document.getElementById('prod-price').value = '';
@@ -76,11 +90,11 @@ window.openModal = function() {
     document.getElementById('product-modal').classList.add('open');
 }
 
-window.closeModal = function() {
+window.closeProductModal = function() {
     document.getElementById('product-modal').classList.remove('open');
 }
 
-// Cloud Database Functions
+// Cloud Database Operations
 window.saveProduct = async function() {
     if(!currentUser) return;
     let name = document.getElementById('prod-name').value.trim();
@@ -104,7 +118,7 @@ window.saveProduct = async function() {
             stock: stock,
             createdAt: Date.now()
         });
-        closeModal();
+        closeProductModal();
     } catch (error) {
         alert("Save karne me error aayi: " + error.message);
     }
@@ -143,7 +157,7 @@ function renderApp() {
     document.getElementById('total-stock').innerText = totalStockQty;
 
     if(products.length === 0) {
-        container.innerHTML = `<div class="empty-msg">Abhi cloud par koi item nahi hai.<br>Neeche diye gaye (+) button se naya product add karein.</div>`;
+        container.innerHTML = `<div class="empty-msg">Abhi aapke account me koi item nahi hai.<br>Neeche diye gaye (+) button se naya product add karein.</div>`;
         return;
     }
 
