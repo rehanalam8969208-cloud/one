@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>one - Clothing & E-Commerce Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-text">one - Clothing</div>
+        <div style="font-size: 12px; opacity: 0.8;">E-Commerce Stock</div>
+    </header>
+
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <span>Total Items</span>
+            <h3 id="total-items">0</h3>
+        </div>
+        <div class="stat-card">
+            <span>Total Stock</span>
+            <h3 id="total-stock">0</h3>
+        </div>
+    </div>
+
+    <div class="top-action-bar">
+        <button class="btn-action" onclick="window.print()">🖨️ Print / PDF Bill</button>
+        <button class="btn-action" onclick="clearAllData()" style="color: #ff8080;">🗑️ Clear Data</button>
+    </div>
+
+    <div id="product-container">
+        <!-- Products load here -->
+    </div>
+
+    <div class="fab" onclick="openModal()">+</div>
+
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <h3>Naya Kapda / Item Jodein</h3>
+            <input type="text" id="prod-name" placeholder="Item Name (jaise: Jeans, Shirt)">
+            
+            <div style="display: flex; gap: 10px;">
+                <select id="prod-size" style="flex:1;">
+                    <option value="S">Size: S</option>
+                    <option value="M" selected>Size: M</option>
+                    <option value="L">Size: L</option>
+                    <option value="XL">Size: XL</option>
+                    <option value="XXL">Size: XXL</option>
+                    <option value="Free Size">Free Size</option>
+                </select>
+                <input type="text" id="prod-color" placeholder="Color (jaise: Black, Red)" style="flex:1;">
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="prod-price" placeholder="Price (₹)">
+                <input type="number" id="prod-stock" placeholder="Initial Stock Qty">
+            </div>
+
+            <div class="modal-btns">
+                <button class="btn-close" onclick="closeModal()">Radd Karein</button>
+                <button class="btn-save" onclick="saveProduct()">Save Karein</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
