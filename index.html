@@ -3,73 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>one - Cloud Clothing Manager</title>
+    <title>one - Professional Cloud Inventory</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+        /* Professional Dark Theme Variables & Reset */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8; /* Cyan */
+            --danger: #ef4444; /* Red */
+            --success: #22c55e; /* Green */
+            --input-bg: #0f172a;
         }
 
-        html, body {
-            height: 100%;
-            height: 100dvh;
-            background: #0f172a;
-            color: #F8FAFC;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        html, body { height: 100%; width: 100%; background: var(--bg-color); color: var(--text-main); overflow: hidden; }
 
+        /* --- Professional Header --- */
         header {
-            padding: 14px 20px;
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
+            padding: 12px 20px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
-            z-index: 50;
+            height: 60px;
+            position: relative;
+            z-index: 100;
         }
-        .logo-text { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: #38bdf8; }
-
-        .profile-btn {
-            background: #334155;
-            border: 1px solid #475569;
-            color: #f8fafc;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 13px;
+        .logo-text { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; color: var(--accent); }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        
+        .profile-icon {
+            font-size: 24px;
+            color: var(--text-muted);
             cursor: pointer;
+            position: relative;
         }
-        .logout-btn {
-            background: #334155;
-            border: none;
-            color: #f87171;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            display: none;
-        }
+        .profile-icon:hover { color: var(--accent); }
 
-        .lock-screen-box {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+        /* --- Auth Screens (Login/Signup) --- */
+        .auth-screen {
+            position: fixed; top: 60px; left: 0; width: 100%; height: calc(100% - 60px);
+            background: var(--bg-color);
+            display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
             padding: 20px;
-            text-align: center;
-            background: #0f172a;
+            z-index: 300;
         }
-        .lock-screen-box h2 { color: #f8fafc; font-size: 24px; margin-bottom: 8px; }
-        .lock-screen-box p { color: #94a3b8; font-size: 14px; max-width: 300px; line-height: 1.5; }
+        .auth-screen.active { display: flex; }
+        
+        .auth-box {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .auth-box h2 { font-size: 24px; color: var(--text-main); text-align: center; margin-bottom: 10px; }
+        
+        /* Google Login Button */
+        .btn-google {
+            background: white;
+            color: #444;
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+        .btn-google:hover { background: #f1f1f1; }
+        .btn-google img { width: 20px; height: 20px; }
 
+        .auth-divider { text-align: center; color: var(--text-muted); font-size: 13px; margin: 5px 0; }
+
+        .auth-box input {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            width: 100%;
+        }
+        .auth-box input:focus { outline: none; border-color: var(--accent); }
+        
+        .btn-auth-action {
+            background: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-auth-action:hover { opacity: 0.9; }
+
+        .auth-switch {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        .auth-switch span { color: var(--accent); cursor: pointer; font-weight: bold; }
+
+        /* --- Profile Menu (Dropdown) --- */
+        .profile-menu {
+            position: absolute; top: 65px; right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px;
+            width: 160px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            gap: 8px;
+            z-index: 200;
+        }
+        .profile-menu.active { display: flex; }
+        .user-email { font-size: 12px; color: var(--text-muted); padding: 5px; border-bottom: 1px solid var(--border-color); text-align: center; word-break: break-all;}
+        .menu-item { padding: 10px; color: var(--text-main); font-size: 14px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px;}
+        .menu-item:hover { background: rgba(255,255,255,0.1); }
+        .menu-item.logout { color: var(--danger); }
+
+        /* --- Main App Screen (Dashboard) --- */
+        #app-screen {
+            flex: 1;
+            display: none; /* Hidden until logged in */
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
         .dashboard-stats {
             display: flex;
             gap: 12px;
@@ -78,85 +161,14 @@
         }
         .stat-card {
             flex: 1;
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 16px;
             border-radius: 12px;
             text-align: center;
         }
-        .stat-card span { font-size: 12px; color: #94a3b8; }
-        .stat-card h3 { font-size: 20px; margin-top: 4px; color: #f1f5f9; }
-
-        #product-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 0 15px 90px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .product-card {
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 16px;
-            border-radius: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-        }
-        .prod-details h4 { font-size: 17px; font-weight: 700; color: #f8fafc; }
-        .prod-tags { display: flex; gap: 6px; margin-top: 6px; }
-        .tag {
-            font-size: 11px;
-            background: #334155;
-            color: #cbd5e1;
-            padding: 3px 9px;
-            border-radius: 6px;
-        }
-        .prod-right { text-align: right; }
-        .prod-price { font-size: 17px; font-weight: bold; color: #38bdf8; }
-        .stock-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 8px;
-            background: #0f172a;
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid #334155;
-        }
-        .stock-control button {
-            background: none;
-            border: none;
-            color: #38bdf8;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 24px;
-            height: 24px;
-        }
-        .stock-count { font-size: 14px; font-weight: bold; color: #ffffff; }
-
-        .fab {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 60px;
-            height: 60px;
-            background: #38bdf8;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: #0f172a;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
-            z-index: 50;
-            font-weight: bold;
-        }
-        .fab:active { transform: scale(0.92); }
+        .stat-card span { font-size: 12px; color: var(--text-muted); }
+        .stat-card h3 { font-size: 20px; margin-top: 4px; color: var(--text-main); }
 
         .top-action-bar {
             padding: 0 15px 10px 15px;
@@ -168,28 +180,117 @@
             flex: 1;
             padding: 10px;
             border-radius: 10px;
-            border: 1px solid #334155;
-            background: #1e293b;
-            color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-main);
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
+        .btn-action:hover { background: rgba(255,255,255,0.1); }
 
+        /* Product List */
+        #product-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 15px 90px 15px; /* Bottom padding for FAB */
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .prod-details h4 { font-size: 17px; font-weight: 700; color: var(--text-main); }
+        .prod-tags { display: flex; gap: 6px; margin-top: 6px; }
+        .tag {
+            font-size: 11px;
+            background: #334155;
+            color: #cbd5e1;
+            padding: 3px 9px;
+            border-radius: 6px;
+        }
+        .prod-right { text-align: right; }
+        .prod-price { font-size: 17px; font-weight: bold; color: var(--accent); }
+        .stock-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            background: #0f172a;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .stock-control button {
+            background: none; border: none; color: var(--accent);
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .stock-control button:active { transform: scale(0.9); }
+        .stock-count { font-size: 14px; font-weight: bold; color: var(--text-main); min-width: 40px; text-align: center; }
+
+        /* Delete Icon */
+        .btn-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 5px;
+        }
+        .btn-delete:hover { color: var(--danger); }
+
+        /* --- Floating Action Button (FAB) --- */
+        .fab {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #0f172a;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+            z-index: 100;
+            transition: transform 0.2s;
+            border: none;
+        }
+        .fab:active { transform: scale(0.95); }
+
+        /* --- Add Product Modal (Pop-up) --- */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            display: none;
+            display: none; /* Hidden by default */
             justify-content: center;
-            align-items: flex-end;
-            z-index: 200;
+            align-items: flex-end; /* Slides in from bottom */
+            z-index: 400;
         }
         .modal.open { display: flex; }
-
-        .auth-modal-box, .modal-content {
-            background: #1e293b;
-            border: 1px solid #334155;
+        
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             width: 100%;
             max-width: 500px;
             padding: 24px;
@@ -197,329 +298,41 @@
             border-top-right-radius: 24px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
             box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
             max-height: 85vh;
             overflow-y: auto;
         }
-        .auth-modal-box input, .modal-content input, .modal-content select {
+        .modal-content h3 { font-size: 19px; color: var(--text-main); margin-bottom: 4px; }
+        .modal-content input, .modal-content select {
             width: 100%;
             padding: 14px;
             border-radius: 12px;
-            border: 1px solid #475569;
-            background: #0f172a;
-            color: #ffffff;
-            font-size: 15px;
-            outline: none;
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-size: 16px;
         }
-        .auth-modal-box input::placeholder, .modal-content input::placeholder { color: #94a3b8; }
-
-        .btn-main-auth {
-            background: #38bdf8;
-            color: #0f172a;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-        }
-        .auth-toggle-text {
-            text-align: center;
-            font-size: 13px;
-            color: #94a3b8;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-        .auth-toggle-text b { color: #38bdf8; }
-
+        .modal-content input:focus, .modal-content select:focus { outline: none; border-color: var(--accent); }
+        .modal-content input::placeholder { color: var(--text-muted); }
+        
         .modal-btns { display: flex; gap: 10px; margin-top: 10px; }
         .modal-btns button {
             flex: 1;
             padding: 14px;
             border-radius: 12px;
             border: none;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
-        .btn-save { background: #38bdf8; color: #0f172a; }
-        .btn-close { background: #334155; color: #f8fafc; }
+        .btn-save { background: var(--accent); color: #0f172a; }
+        .btn-close { background: var(--border-color); color: var(--text-main); }
+        .modal-btns button:hover { opacity: 0.9; }
 
-        .empty-msg { text-align: center; color: #94a3b8; margin-top: 50px; font-size: 15px; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo-text">one - Clothing</div>
-        <div>
-            <button class="profile-btn" onclick="openAuthModal()" id="profile-icon-btn">👤 Profile / Login</button>
-            <button class="logout-btn" onclick="logoutUser()" id="logout-icon-btn">Logout</button>
-        </div>
-    </header>
-
-    <!-- AUTH MODAL -->
-    <div class="modal" id="auth-modal">
-        <div class="modal-content auth-modal-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <h3 id="auth-title">Account Login</h3>
-                <button onclick="closeAuthModal()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;">✕</button>
-            </div>
-            <p id="auth-subtitle" style="font-size: 12px; color: #94a3b8; margin-bottom: 10px;">Apna email aur password dalein</p>
-            
-            <input type="email" id="auth-email" placeholder="Email Address">
-            <input type="password" id="auth-password" placeholder="Password (min 6 chars)">
-            
-            <button class="btn-main-auth" id="auth-submit-btn" onclick="handleAuth()">Login</button>
-            <p class="auth-toggle-text" onclick="toggleAuthMode()"><span id="toggle-text-info">Account nahi hai?</span> <b id="toggle-action-btn">Sign Up karein</b></p>
-        </div>
-    </div>
-
-    <!-- LOCK SCREEN -->
-    <div id="lock-screen" class="lock-screen-box">
-        <div style="font-size: 48px; margin-bottom: 10px;">🔒</div>
-        <h2>Pehle Login Karein</h2>
-        <p>Apna data dekhne aur manage karne ke liye upar <b>Profile</b> par click karke login karein.</p>
-        <button class="btn-main-auth" style="margin-top: 15px; width: 200px;" onclick="openAuthModal()">Login Karein</button>
-    </div>
-
-    <!-- MAIN APP SCREEN -->
-    <div id="app-screen" style="display: none; flex: 1; flex-direction: column; overflow: hidden;">
-        <div class="dashboard-stats">
-            <div class="stat-card">
-                <span>Total Items</span>
-                <h3 id="total-items">0</h3>
-            </div>
-            <div class="stat-card">
-                <span>Total Stock</span>
-                <h3 id="total-stock">0</h3>
-            </div>
-        </div>
-
-        <div class="top-action-bar">
-            <button class="btn-action" onclick="window.print()">🖨️ Print / PDF Bill</button>
-        </div>
-
-        <div id="product-container"></div>
-        <div class="fab" onclick="openProductModal()">+</div>
-    </div>
-
-    <!-- ADD PRODUCT MODAL -->
-    <div class="modal" id="product-modal">
-        <div class="modal-content">
-            <h3>Naya Kapda / Item Jodein</h3>
-            <input type="text" id="prod-name" placeholder="Item Name (jaise: Jeans, Shirt)">
-            
-            <div style="display: flex; gap: 10px;">
-                <select id="prod-size" style="flex:1;">
-                    <option value="S">Size: S</option>
-                    <option value="M" selected>Size: M</option>
-                    <option value="L">Size: L</option>
-                    <option value="XL">Size: XL</option>
-                    <option value="XXL">Size: XXL</option>
-                    <option value="Free Size">Free Size</option>
-                </select>
-                <input type="text" id="prod-color" placeholder="Color (jaise: Black, Red)" style="flex:1;">
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-                <input type="number" id="prod-price" placeholder="Price (₹)">
-                <input type="number" id="prod-stock" placeholder="Initial Stock Qty">
-            </div>
-
-            <div class="modal-btns">
-                <button class="btn-close" onclick="closeProductModal()">Radd Karein</button>
-                <button class="btn-save" onclick="saveProduct()">Save Karein</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- FIREBASE & APP LOGIC SCRIPT -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyB82Pj-Qcv05Wvdr941nnfAOwj1TU6FkUU",
-          authDomain: "one-14aef.firebaseapp.com",
-          projectId: "one-14aef",
-          storageBucket: "one-14aef.firebasestorage.app",
-          messagingSenderId: "570713727151",
-          appId: "1:570713727151:web:0dae8e88a6ecdda3b3b45a",
-          measurementId: "G-FBDVL0H7PJ"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let isSignUp = false;
-        let currentUser = null;
-        let products = [];
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('app-screen').style.display = 'flex';
-                document.getElementById('profile-icon-btn').style.display = 'none';
-                document.getElementById('logout-icon-btn').style.display = 'block';
-                closeAuthModal();
-                loadProductsFromCloud();
-            } else {
-                currentUser = null;
-                document.getElementById('lock-screen').style.display = 'flex';
-                document.getElementById('app-screen').style.display = 'none';
-                document.getElementById('profile-icon-btn').style.display = 'block';
-                document.getElementById('logout-icon-btn').style.display = 'none';
-            }
-        });
-
-        window.openAuthModal = function() {
-            document.getElementById('auth-modal').classList.add('open');
-        }
-
-        window.closeAuthModal = function() {
-            document.getElementById('auth-modal').classList.remove('open');
-        }
-
-        window.toggleAuthMode = function() {
-            isSignUp = !isSignUp;
-            document.getElementById('auth-title').innerText = isSignUp ? "Naya Account Banayein" : "Account Login";
-            document.getElementById('auth-submit-btn').innerText = isSignUp ? "Sign Up" : "Login";
-            document.getElementById('toggle-text-info').innerText = isSignUp ? "Pehle se account hai?" : "Account nahi hai?";
-            document.getElementById('toggle-action-btn').innerText = isSignUp ? "Login karein" : "Sign Up karein";
-        }
-
-        window.handleAuth = async function() {
-            const email = document.getElementById('auth-email').value.trim();
-            const password = document.getElementById('auth-password').value.trim();
-
-            if(!email || password.length < 6) {
-                alert("Kripya valid email aur kam se kam 6 akshar ka password daalein!");
-                return;
-            }
-
-            try {
-                if (isSignUp) {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    alert("Account safalpurvak ban gaya!");
-                } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                }
-            } catch (error) {
-                alert("Error: " + error.message);
-            }
-        }
-
-        window.logoutUser = function() {
-            signOut(auth);
-        }
-
-        window.openProductModal = function() {
-            document.getElementById('prod-name').value = '';
-            document.getElementById('prod-color').value = '';
-            document.getElementById('prod-price').value = '';
-            document.getElementById('prod-stock').value = '';
-            document.getElementById('product-modal').classList.add('open');
-        }
-
-        window.closeProductModal = function() {
-            document.getElementById('product-modal').classList.remove('open');
-        }
-
-        window.saveProduct = async function() {
-            if(!currentUser) return;
-            let name = document.getElementById('prod-name').value.trim();
-            let size = document.getElementById('prod-size').value;
-            let color = document.getElementById('prod-color').value.trim() || 'Standard';
-            let price = parseFloat(document.getElementById('prod-price').value);
-            let stock = parseInt(document.getElementById('prod-stock').value);
-
-            if(!name || isNaN(price) || isNaN(stock)) {
-                alert("Kripya Naam, Price aur Stock sahi se bharein!");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "products"), {
-                    userId: currentUser.uid,
-                    name: name,
-                    size: size,
-                    color: color,
-                    price: price,
-                    stock: stock,
-                    createdAt: Date.now()
-                });
-                closeProductModal();
-            } catch (error) {
-                alert("Save karne me error aayi: " + error.message);
-            }
-        }
-
-        window.updateStock = async function(docId, currentStock, change) {
-            let newStock = currentStock + change;
-            if(newStock < 0) newStock = 0;
-            try {
-                const prodRef = doc(db, "products", docId);
-                await updateDoc(prodRef, { stock: newStock });
-            } catch (error) {
-                alert("Stock update error: " + error.message);
-            }
-        }
-
-        function loadProductsFromCloud() {
-            const q = query(collection(db, "products"), where("userId", "==", currentUser.uid));
-            onSnapshot(q, (snapshot) => {
-                products = [];
-                snapshot.forEach((docSnap) => {
-                    products.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                renderApp();
-            });
-        }
-
-        function renderApp() {
-            const container = document.getElementById('product-container');
-            container.innerHTML = '';
-
-            let totalItems = products.length;
-            let totalStockQty = products.reduce((sum, p) => sum + p.stock, 0);
-
-            document.getElementById('total-items').innerText = totalItems;
-            document.getElementById('total-stock').innerText = totalStockQty;
-
-            if(products.length === 0) {
-                container.innerHTML = `<div class="empty-msg">Abhi aapke account me koi item nahi hai.<br>Neeche diye gaye (+) button se naya product add karein.</div>`;
-                return;
-            }
-
-            products.forEach(p => {
-                let card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <div class="prod-details">
-                        <h4>${p.name}</h4>
-                        <div class="prod-tags">
-                            <span class="tag">Size: ${p.size}</span>
-                            <span class="tag">Color: ${p.color}</span>
-                        </div>
-                    </div>
-                    <div class="prod-right">
-                        <div class="prod-price">₹${p.price}</div>
-                        <div class="stock-control">
-                            <button onclick="updateStock('${p.id}', ${p.stock}, -1)">-</button>
-                            <span class="stock-count">${p.stock} pcs</span>
-                            <button onclick="updateStock('${p.id}', ${p.stock}, 1)">+</button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-    </script>
-</body>
-</html>
+        .empty-msg { text-align: center; color: var(--text-muted); margin-top: 50px; font-size: 15px; padding: 20px; }
+        
+        /* Print Styles */
+        @media print {
+            body
