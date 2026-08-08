@@ -314,7 +314,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyB82Pj-Qcv05Wvdr941nnfAOwj1TU6FkUU",
@@ -344,7 +344,7 @@
                 loadProductsFromCloud(user.uid);
             } else {
                 currentUser = null;
-                if (unsubscribeProducts) unsubscribeProducts(); // Stop listening when logged out
+                if (unsubscribeProducts) unsubscribeProducts();
                 document.getElementById('auth-screen').style.display = 'flex';
                 document.getElementById('app-screen').style.display = 'none';
                 document.getElementById('header-profile-container').style.display = 'none';
@@ -369,12 +369,11 @@
             try {
                 if (isSignUp) {
                     await createUserWithEmailAndPassword(auth, email, password);
-                    alert("Account safalpurvak ban gaya aur login ho gaya!");
                 } else {
                     await signInWithEmailAndPassword(auth, email, password);
                 }
             } catch (error) {
-                alert("Authentication Error: " + error.message);
+                alert("Auth Error: " + error.message);
             }
         }
 
@@ -423,7 +422,7 @@
                 });
                 closeProductModal();
             } catch (error) {
-                alert("Save error: " + error.message);
+                alert("Save error (Rules check karein): " + error.message);
             }
         }
 
@@ -433,7 +432,7 @@
             try {
                 await updateDoc(doc(db, "products", docId), { stock: newStock });
             } catch (error) {
-                alert("Stock error: " + error.message);
+                alert("Stock update error: " + error.message);
             }
         }
 
@@ -456,7 +455,7 @@
                 });
                 renderApp(products);
             }, (error) => {
-                console.error("Cloud fetch error: ", error);
+                console.error("Cloud error: ", error);
             });
         }
 
@@ -471,7 +470,7 @@
             document.getElementById('total-stock').innerText = totalStockQty;
 
             if(products.length === 0) {
-                container.innerHTML = `<div class="empty-msg">Abhi aapke cloud account me koi item nahi hai.<br>Neeche (+) button se naya product add karein. Backup hamesha safe rahega!</div>`;
+                container.innerHTML = `<div class="empty-msg">Abhi aapke cloud account me koi item nahi hai.<br>Neeche (+) button se naya product add karein. Backup safe rahega!</div>`;
                 return;
             }
 
@@ -501,4 +500,4 @@
         }
     </script>
 </body>
-</html>             
+</html>
